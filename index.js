@@ -6,9 +6,15 @@ module.exports = {
       }
       return returnObj
   },
-  useEnv: ({suppressLog})=>{
+  /*
+    getEnvFn is a function that returns a json object (or throws)
+    in most cases this function will be: ()=>require('./env')
+    By using a closure, we're able to get "./" to
+    reference the user code, not this module.
+  */
+  useEnv: (getEnvFn)=>{
     try{
-      const env = require('./env')
+      const env = getEnvFn()
       console.log('Registering environment variables:')
       for(const [key,value] of Object.entries(env)){
         process.env[key] = value
